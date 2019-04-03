@@ -1,8 +1,17 @@
-<% include layout/header.ejs %>
+<% include partials/header.ejs %>
 <div class="main">
   <div class="container">
-   
+    <div class="content">
+      <div class="list">
+        <div class="top">
+          <h2>Create New List</h2>
+          <form action="" method="post">
+            <input name="listTitle" id="listTitle" type="text" required><button type="submit">Create</button>
+          </form>
+        </div>
+      </div>
+      <% include partials/list.ejs %>
+    </div>
   </div>
 </div>
-
-<% include layout/footer.ejs %>
+<% include partials/footer.ejs %>

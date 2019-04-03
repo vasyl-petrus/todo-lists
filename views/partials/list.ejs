@@ -1,0 +1,12 @@
+<% lists.forEach((list, index) => { %>
+<div class="list">
+  <div class="top">
+    <h2><a class="a" href="/todo/<%= list.id %>"><%= list.name %></a></h2>
+  </div>
+    <div class="actions">
+      <button class="material-icons icon">
+        <a class="a" href="/delete/<%= list.id %>">delete</a>
+      </button>
+    </div>
+</div>
+<% }) %>

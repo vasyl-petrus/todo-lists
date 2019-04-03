@@ -1,17 +1,37 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-const config = require('./config');
-
+const mysql = require('mysql');
 const app = express();
 
 app.set('view engine', 'ejs');
 app.use(express.static('public'));
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.urlencoded({
+  extended: true
+}));
 app.use(bodyParser.json());
 
-app.get('/',(req, res) => {
-    res.render('index');
-})
+const {addList, getLists, deleteList, getList} = require('./routes/index');
+const {addTask, editPage, editTask, deleteTask} = require('./routes/tasks');
+
+var connectionString = 'mysql://root:root@localhost/TaskList?charset=utf8_general_ci&timezone=-0700';
+var con = mysql.createConnection(connectionString);
+
+con.connect((err) => {
+  if (err) {
+      throw err;
+  }
+  console.log('Connected to database');
+});
+global.con = con;
+
+app.get('/', getLists);
+app.post('/', addList);
+app.get('/delete/:id', deleteList);
+app.get('/todo/:id', getList);
+app.post('/todo/:id', addTask);
+app.post('/todo/edit/:id', editPage);
+app.get('/todo/edit/:id', editTask);
+app.get('/todo/delete/:id', deleteTask);
 
 app.use((req, res, next) => {
   const err = new Error('Not Found');
@@ -19,14 +39,6 @@ app.use((req, res, next) => {
   next(err);
 });
 
-app.use((error, req, res, next) => {
-  res.status(error.status || 500);
-  res.render('error', {
-    message: error.message,
-    error: !config.IS_PRODUCTION ? error : {}
-  });
-});
-
-app.listen(config.PORT, () =>
-  console.log(`Example app listening on port ${config.PORT}!`)
+app.listen(3000, () =>
+  console.log(`app listening on port 3000!`)
 );

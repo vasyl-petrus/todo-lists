@@ -1,0 +1,13 @@
+<% tasks.forEach((task, index) => { %>
+<div class="todo-item">
+    <span id="task" class="title"><%= task.text %></span>
+    <div class="actions">
+        <button class="material-icons icon">
+            <a class="a" href="/todo/delete/<%= task.id %>">delete</a>
+        </button>
+        <button id="edit" class="material-icons icon">
+            <a class="a" href="/todo/edit/<%= task.id %>">edit</a>
+        </button>
+    </div>
+</div>
+<% }) %>
