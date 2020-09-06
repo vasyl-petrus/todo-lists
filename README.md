@@ -1,5 +1,5 @@
 # testTask
-Before starting a project, you need to create a database tasklist and tables tasks and lists
+Before starting a project, you need to create a database `tasklist` and tables `tasks` and `lists`
 
 CREATE DATABASE tasklist;
 
