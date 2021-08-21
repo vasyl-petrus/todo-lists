@@ -1,24 +1,31 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const mysql = require('mysql');
+require('dotenv').config();
+
 const app = express();
 
 app.set('view engine', 'ejs');
 app.use(express.static('public'));
-app.use(bodyParser.urlencoded({
-  extended: true
-}));
+app.use(
+  bodyParser.urlencoded({
+    extended: true,
+  })
+);
 app.use(bodyParser.json());
 
-const {addList, getLists, deleteList, getList} = require('./routes/index');
-const {addTask, editPage, editTask, deleteTask} = require('./routes/tasks');
+const { addList, getLists, deleteList, getList } = require('./routes/index');
+const { addTask, editPage, editTask, deleteTask } = require('./routes/tasks');
 
-var connectionString = 'mysql://root:root@localhost/TaskList?charset=utf8_general_ci&timezone=-0700';
-var con = mysql.createConnection(connectionString);
+var con = mysql.createConnection({
+  host: 'localhost',
+  user: 'root',
+  password: 'root',
+});
 
 con.connect((err) => {
   if (err) {
-      throw err;
+    throw err;
   }
   console.log('Connected to database');
 });
@@ -39,6 +46,4 @@ app.use((req, res, next) => {
   next(err);
 });
 
-app.listen(3000, () =>
-  console.log(`app listening on port 3000!`)
-);
+app.listen(3000, () => console.log(`app listening on port 3000!`));
