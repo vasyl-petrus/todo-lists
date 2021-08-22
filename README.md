@@ -1,17 +1,43 @@
 # testTask
-Before starting a project, you need to create a database `tasklist` and tables `tasks` and `lists`
+requirements:
+- Build the system of managing toDo lists.
+- Build ability to create/view/delete lists
+- Build ability to add/view/edit/delete list points.
+- For storing lists data use database manage system
+- Make possible to create several lists.
 
-CREATE DATABASE tasklist;
+## How to run it
 
-CREATE TABLE IF NOT EXISTS `lists` (
-  `id` int(5) NOT NULL AUTO_INCREMENT,
-  `name` varchar(255) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1;
+### Install dependencies
 
-CREATE TABLE IF NOT EXISTS `tasks` (
-  `id` int(5) NOT NULL AUTO_INCREMENT,
-  `text` varchar(255) NOT NULL,
-  `listId` varchar(255) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1;
+```bash
+npm install
+```
+
+### Set Environment variables
+
+All Environment variables contain in `.env.example`. To set your Environment variables you should `.env.example` rename to `.env` and fill in all variables inside
+
+Before starting a project, you need to create a database with name which you fil in `.env` file in fild DB_NAME=`<your database name>`
+
+```
+CREATE DATABASE `<your database name>`;
+```
+### Run migrations
+
+```bash
+knex migrate:latest
+```
+### Run app
+
+```bash
+npm run dev
+```
+
+by default app running on http://localhost:3000/
+
+## Technology Stack
+- Experss Js
+- MySQL
+- EJS
+- Knex
