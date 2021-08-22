@@ -19,7 +19,7 @@ const { addTask, editPage, editTask, deleteTask } = require('./routes/tasks');
 
 app.get('/', getLists);
 app.post('/', addList);
-app.delete('/delete/:id', deleteList);
+app.get('/delete/:id', deleteList);
 app.get('/todo/:id', getList);
 app.post('/todo/:id', addTask);
 app.put('/todo/edit/:id', editPage);
