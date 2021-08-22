@@ -1,44 +1,38 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-const mysql = require('mysql');
+require('dotenv').config();
 const app = express();
 
 app.set('view engine', 'ejs');
 app.use(express.static('public'));
-app.use(bodyParser.urlencoded({
-  extended: true
-}));
+app.use(
+  bodyParser.urlencoded({
+    extended: true,
+  })
+);
 app.use(bodyParser.json());
 
-const {addList, getLists, deleteList, getList} = require('./routes/index');
-const {addTask, editPage, editTask, deleteTask} = require('./routes/tasks');
-
-var connectionString = 'mysql://root:root@localhost/TaskList?charset=utf8_general_ci&timezone=-0700';
-var con = mysql.createConnection(connectionString);
-
-con.connect((err) => {
-  if (err) {
-      throw err;
-  }
-  console.log('Connected to database');
-});
-global.con = con;
+const { addList, getLists, deleteList, getList } = require('./routes/index');
+const { addTask, editPage, editTask, deleteTask } = require('./routes/tasks');
 
 app.get('/', getLists);
 app.post('/', addList);
 app.get('/delete/:id', deleteList);
 app.get('/todo/:id', getList);
 app.post('/todo/:id', addTask);
-app.post('/todo/edit/:id', editPage);
-app.get('/todo/edit/:id', editTask);
-app.get('/todo/delete/:id', deleteTask);
+app.get('/todo/edit/:id', editPage);
+app.post('/todo/edit/:id', editTask);
+app.get('/todo/delete/:list_id/:id', deleteTask);
 
-app.use((req, res, next) => {
-  const err = new Error('Not Found');
-  err.status = 404;
-  next(err);
+app.use(function (req, res, next) {
+  res.status(404);
+
+  if (req.accepts('json')) {
+    res.json({ error: 'Not found' });
+    return;
+  }
+
+  res.type('txt').send('Not found');
 });
 
-app.listen(3000, () =>
-  console.log(`app listening on port 3000!`)
-);
+app.listen(3000, () => console.log(`app listening on port 3000!`));

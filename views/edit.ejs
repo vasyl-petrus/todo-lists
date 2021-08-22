@@ -1,16 +1,29 @@
 <% include partials/header.ejs %>
 <div class="main">
-    <div class="container">
-        <div class="content">
-            <div class="list">
-                <div class="top">
-                    <form action="" method="post">
-                        <input name="listId" value="<%=item[0].listId%>" type="hidden" readonly hidden>
-                        <input name="taskText" id="taskText" type="text" value="<%= item[0].text %>" required>
-                        <button id="add" type="submit">Edit</button>
-                    </form>
-                </div>
-            </div>
+  <div class="container">
+    <div class="content">
+      <div class="list">
+        <div class="top">
+          <form action="" method="post">
+            <input
+              name="list_id"
+              value="<%=task[0].list_id%>"
+              type="hidden"
+              readonly
+              hidden
+            />
+            <input
+              name="taskText"
+              id="taskText"
+              type="text"
+              value="<%= task[0].text %>"
+              required
+            />
+            <button id="add" type="submit">Edit</button>
+          </form>
         </div>
+      </div>
     </div>
-    <% include partials/footer.ejs %>
+  </div>
+  <% include partials/footer.ejs %>
+</div>

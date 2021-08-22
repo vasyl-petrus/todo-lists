@@ -1,58 +1,56 @@
+const knex = require('../knex.js');
+
 module.exports = {
-    addList: (req, res) => {
-        let title = req.body.listTitle;
-        let query = "INSERT INTO lists (name) VALUES ('" + title + "')";
+  addList: async (req, res) => {
+    try {
+      await knex('lists').insert({ name: req.body.listTitle });
 
-        con.query(query, function (err, result) {
-            if (err) throw err;
-            console.log("1 record inserted");
-            res.redirect('/');
-        });
-    },
-    getLists: (req, res) => {
-        let query = "SELECT * FROM lists ORDER BY id DESC";
-        let tasks = "SELECT * FROM tasks ";
-        con.query(query, (err, lists) => {
-            con.query(tasks, (err, tasks) => {
-                if (err) {
-                    res.redirect('/');
-                }
-                res.render('index.ejs', {
-                    lists,
-                    tasks
-                });
-            });
-        });
-    },
-    getList: (req, res) => {
-        let list = "SELECT id,name FROM lists WHERE id='" + req.params.id + "'";
-        let tasks = "SELECT * FROM tasks WHERE listId='" + req.params.id + "'";
-
-        con.query(list, (err, list) => {
-            con.query(tasks, (err, tasks) => {
-
-                if (err) {
-                    res.redirect('/');
-                }
-                res.render('todoList.ejs', {
-                    list,
-                    tasks
-                });
-            });
-        });
-    },
-    deleteList: (req, res) => {
-        let listId = req.params.id;
-        let deleteList = 'DELETE FROM lists WHERE id = "' + listId + '"';
-        let deleteTasks = 'DELETE FROM tasks WHERE listId = "' + listId + '"';
-        con.query(deleteTasks, (err, result) => {
-            con.query(deleteList, (err, result) => {
-                if (err) {
-                    console.log(err);
-                    return res.status(500).send(err);
-                }
-                res.redirect('/');
-            });
-        });
+      res.redirect('/');
+    } catch (error) {
+      throw error;
     }
-}
+  },
+  getLists: async (req, res) => {
+    try {
+      const lists = await knex.select('*').from('lists').orderBy('id', 'desc');
+      const tasks = await knex.select('*').from('tasks');
+
+      res.render('index.ejs', {
+        lists,
+        tasks,
+      });
+    } catch (error) {
+      throw error;
+    }
+  },
+  getList: async (req, res) => {
+    try {
+      const list = await knex
+        .select('id', 'name')
+        .from('lists')
+        .where({ id: req.params.id })
+        .orderBy('id', 'desc');
+      const tasks = await knex
+        .select('*')
+        .from('tasks')
+        .where({ list_id: req.params.id });
+
+      res.render('todoList.ejs', {
+        list,
+        tasks,
+      });
+    } catch (error) {
+      throw error;
+    }
+  },
+  deleteList: async (req, res) => {
+    try {
+      await knex('tasks').where({ list_id: req.params.id }).del();
+      await knex('lists').where({ id: req.params.id }).del();
+
+      res.redirect('/');
+    } catch (error) {
+      throw error;
+    }
+  },
+};
