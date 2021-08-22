@@ -22,9 +22,9 @@ app.post('/', addList);
 app.get('/delete/:id', deleteList);
 app.get('/todo/:id', getList);
 app.post('/todo/:id', addTask);
-app.put('/todo/edit/:id', editPage);
-app.get('/todo/edit/:id', editTask);
-app.delete('/todo/delete/:id', deleteTask);
+app.get('/todo/edit/:id', editPage);
+app.post('/todo/edit/:id', editTask);
+app.get('/todo/delete/:list_id/:id', deleteTask);
 
 app.use((req, res, next) => {
   const err = new Error('Not Found');

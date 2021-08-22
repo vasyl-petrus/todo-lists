@@ -1,50 +1,46 @@
+const knex = require('../knex.js');
+
 module.exports = {
-    deleteTask: (req, res) => {
-        let listId = req.params.id;
-        let id = req.params.id;
-        let deleteTasks = 'DELETE FROM tasks WHERE id = "' + id + '"';
-        con.query(deleteTasks, (err, result) => {
-
-            if (err) {
-                console.log(err);
-                return res.status(500).send(err);
-            }
-            res.redirect('/todo/' + listId);
-        });
-    },
-    addTask: (req, res) => {
-        let text = req.body.taskText;
-        let listId = req.params.id;
-        let query = "INSERT INTO tasks (text,listId) VALUES ('" + text + "','" + listId + "')";
-
-        con.query(query, function (err, result) {
-            if (err) throw err;
-            console.log("1 record inserted");
-            res.redirect('/todo/' + listId);
-        });
-    },
-    editPage: (req, res) => {
-        let task = "SELECT id, text,listId FROM tasks WHERE id='" + req.params.id + "'";
-        con.query(task, (err, task) => {
-            if (err) {
-                res.redirect('/');
-            }
-            res.render('edit.ejs', {
-                item: task
-            });
-        });
-    },
-    editTask: (req, res) => {
-        let text = req.body.taskText;
-        let id = req.params.id;
-        var listid = req.body.listId;
-
-        let query = "UPDATE `tasks` SET `text` = '" + text + "' WHERE `tasks`.`id` = '" + id + "'";
-        con.query(query, (err, result) => {
-            if (err) {
-                return res.status(500).send(err);
-            }
-            res.redirect('/todo/' + listid);
-        });
+  addTask: async (req, res) => {
+    try {
+      await knex('tasks').insert({
+        text: req.body.taskText,
+        list_id: req.params.id,
+      });
+      res.redirect('/todo/' + req.params.id);
+    } catch (error) {
+      throw error;
     }
-}
+  },
+  editPage: async (req, res) => {
+    try {
+      const task = await knex('tasks')
+        .select('id', 'text', 'list_id')
+        .where({ id: req.params.id });
+
+      res.render('edit.ejs', {
+        task,
+      });
+    } catch (error) {
+      throw error;
+    }
+  },
+  editTask: async (req, res) => {
+    try {
+      await knex('tasks')
+        .where({ id: req.params.id })
+        .update({ text: req.body.taskText });
+      res.redirect('/todo/' + req.body.list_id);
+    } catch (error) {
+      throw error;
+    }
+  },
+  deleteTask: async (req, res) => {
+    try {
+      await knex('tasks').where({ id: req.params.id }).del();
+      res.redirect('/todo/' + req.params.list_id);
+    } catch (error) {
+      throw error;
+    }
+  },
+};
