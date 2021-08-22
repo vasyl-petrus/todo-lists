@@ -7,6 +7,7 @@ module.exports = {
         text: req.body.taskText,
         list_id: req.params.id,
       });
+
       res.redirect('/todo/' + req.params.id);
     } catch (error) {
       throw error;
@@ -30,6 +31,7 @@ module.exports = {
       await knex('tasks')
         .where({ id: req.params.id })
         .update({ text: req.body.taskText });
+
       res.redirect('/todo/' + req.body.list_id);
     } catch (error) {
       throw error;
@@ -38,6 +40,7 @@ module.exports = {
   deleteTask: async (req, res) => {
     try {
       await knex('tasks').where({ id: req.params.id }).del();
+
       res.redirect('/todo/' + req.params.list_id);
     } catch (error) {
       throw error;

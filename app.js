@@ -1,8 +1,6 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-const mysql = require('mysql');
 require('dotenv').config();
-const knex = require('./knex.js');
 const app = express();
 
 app.set('view engine', 'ejs');
@@ -26,10 +24,15 @@ app.get('/todo/edit/:id', editPage);
 app.post('/todo/edit/:id', editTask);
 app.get('/todo/delete/:list_id/:id', deleteTask);
 
-app.use((req, res, next) => {
-  const err = new Error('Not Found');
-  err.status = 404;
-  next(err);
+app.use(function (req, res, next) {
+  res.status(404);
+
+  if (req.accepts('json')) {
+    res.json({ error: 'Not found' });
+    return;
+  }
+
+  res.type('txt').send('Not found');
 });
 
 app.listen(3000, () => console.log(`app listening on port 3000!`));
