@@ -1,4 +1,4 @@
-# testTask
+# Test task
 requirements:
 - Build the system of managing toDo lists.
 - Build ability to create/view/delete lists
@@ -14,7 +14,7 @@ requirements:
 npm install
 ```
 
-### Set Environment variables
+### Set environment variables
 
 All Environment variables contain in `.env.example`. To set your Environment variables you should `.env.example` rename to `.env` and fill in all variables inside
 
